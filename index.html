@@ -1,0 +1,166 @@
+<html>
+<head>
+    <title>Game WebRTC by Paul Roosens</title>
+
+    <meta name="viewport" content="width=device-width; initial-scale=1;">
+    <meta name="description" content="Transfer files(of any size) and messages in the browser using WebRTC.">
+    <meta name="author" content="erbbysam">
+    <link rel="shortcut icon" href="images/favicon.ico">
+
+    <!-- jquery -->
+    <script src="ext-js/jquery.js"></script>
+    <script src="ext-js/jquery.browser.min.js"></script>
+    <script src="ext-js/base64-arraybuffer.js"></script><!--TODO - needed? -->
+    <script src="ext-js/idb.filesystem.min.js"></script>
+    <!-- OTR -->
+    <script src="ext-js/otr/salsa20.js"></script>
+    <script src="ext-js/otr/bigint.js"></script>
+    <script src="ext-js/otr/crypto.js"></script>
+    <script src="ext-js/otr/eventemitter.js"></script>
+    <script src="ext-js/otr/otr.js"></script>
+    <!-- additional crypto-js -->
+    <script src="ext-js/crypto-js/core.js"></script>
+    <script src="ext-js/crypto-js/rabbit.js"></script>
+    <!-- Bootstrap core CSS -->
+    <link href="bootstrap/css/bootstrap.css" rel="stylesheet"> <!-- min. -->
+
+    <!-- site CSS -->
+    <link type="text/css" href="style.css" rel="stylesheet"></link>
+    <!--  site js  -->
+    <!-- <script src="js/crypto.js"></script>       -->
+    <script src="js/webrtc-data.io.js"></script>
+</head>
+
+<!-- image credit - http://lostandtaken.com/blog/2012/10/14/7-white-grunge-textures.html -->
+<body>
+
+
+<div id="alerts"></div>
+
+<section id="gameinterface">
+
+    <section id="gameside"  style="display:none;">
+        <div id="scoreTeam">
+            BLUE :0 | YELLOW :0
+        </div>
+        <div id="chrono">
+
+        </div>
+
+                    <div id="canvascontainer" >
+
+                        <canvas id="myCanvas" width="600" height="600" style="border: 1px solid black ;">
+                        </canvas>
+                    </div>
+
+
+
+
+
+    </section>
+
+<!--  Fenetre de démarrage  création d'une ROOM -->
+<div id="roomprompt" style="display:none">
+    <div class="panel panel-default username-panel">
+        <div class="panel-body">
+
+            <div class="frontpage_header">To get started create a new room:</div>
+				<span id="room_entry">
+					<form id="webrtc_room_form" class="form-signin">
+                        <input id="existing" type="text" placeholder="room name" value="" />
+                        <button class="btn btn-lg btn-primary btn-block connect-btn" type="submit">create</button>
+                    </form>
+					<br />
+					or<br /><div id="newRoom" class="btn btn-lg btn-primary btn-block connect-btn">generate a random room name</div><br />
+				</span>
+            <br />
+            <span class='support'>Notice: only Google Chrome Canary & Mozilla Firefox are currently supported.</span>
+        </div>
+    </div>
+</div>
+
+<!--  Fenetre de démarrage  création d'un nom -->
+<div id="userprompt" style="display:none">
+    <div class="panel panel-default username-panel">
+        <div class="panel-body">
+            <form id="webrtc_input_form" class="form-signin">
+                <span class="small" id="room_state"></span>
+               <input id="username" type="text" class="form-control" placeholder="username" value="" autofocus>
+                <select id="encryption_type" class="form-control"><option value="NONE" selected></option><option value="OTR">Use OTR</option></select>
+                <input id="encryption_key" class="form-control"type="text" style="display:none;" placeholder="OTR password" value="" />
+                <button class="btn btn-lg btn-primary btn-block connect-btn" type="submit">connect</button>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+
+      <br>
+<div id="chat_display" style="display:none;">
+
+    <div class="row row-offcanvas row-offcanvas-left">
+
+        <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar">
+            <div class="sidebar-nav panel panel-default">
+                <div class="panel-heading"><b> User List: </b></div>
+
+                <div id="filelist" class="panel-body small">
+                    <!--<input type="checkbox" id="auto_download">Automatic download<br />-->
+                    <span id="roomname"></span><br />
+                    <span id="filelist_cointainer"></span>
+                </div>
+            <div class="sidebar-nav panel panel-default">
+                  <div class="panel-heading"> <b> User scores </b></div>
+                <div id="filelist" class="panel-body small">
+                      <div id="score"></div>
+                   </div>
+                </div>
+             </div>
+
+            </div><!--/.well -->
+        </div><!--/span-->
+
+        <div class="col-xs-12 col-sm-9">
+            <div id="chatbox" class="panel panel-default">
+					<span class="visible-xs">
+                        <button type="button" class="btn btn-primary btn-xs btn_off" data-toggle="offcanvas">Toggle User List</button>
+                    </span>
+
+                <div id="chatbox-panel" class="panel-body">
+                    <div id="messages"></div>
+                    <input id="chatinput" style="display:none;" type="text" placeholder="Message: <enter to send>"/>
+                    <div id="pleasewait">
+                        Please wait a few seconds to connect over webrtc.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+   <!--<script src="/socket.io/socket.io.js"></script>-->
+    <script src="js/game/BlocSquare.js"></script>
+    <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script> -->
+
+    <script src="js/game/PartyLocal.js"></script>
+    <script src="js/game/BlocSquare.js"></script>
+    <script src="js/game/Bullet.js"></script>
+    <script src="js/game/Map.js"></script>
+    <script src="js/game/Geometrique.js"></script>
+    <script src="js/game/Personnage.js"></script>
+    <script src="js/game/Gun.js"></script>
+    <script src="js/game/main.js"></script>
+    <script src="js/random_color.js"></script>
+    <script src="js/file-io.js"></script>
+    <script src="js/sendMessage.js"></script>
+    <script src="js/receiveMessage.js"></script>
+    <script src="js/script.js"></script>
+
+
+    <img id="img_1" src="res/1.jpg"  width="0" height="0"/>
+    <img id="img_2" src="res/2.jpg"  width="0" height="0"/>
+    <img id="img_3" src="res/3.jpg"  width="0" height="0"/>
+</body>
+</html>
