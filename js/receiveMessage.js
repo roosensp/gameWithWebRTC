@@ -12,7 +12,7 @@ function packet_inbound(id, message) {
 
     //récuperation des messages
 
-    console.log("METHODE 12 message => "+message ) ;
+    console.log("message recu => "+message ) ;
     if (message.byteLength) { /* must be an arraybuffer, aka a data packet */
         //console.log('recieved arraybuffer!');
         process_binary(id,message,0); /* no reason to hash here */
@@ -20,7 +20,7 @@ function packet_inbound(id, message) {
 
 
         event =  JSON.parse(message).eventName;
-        console.log("EVENT => "+ event) ;
+
 
         if(event == "chat_msg")
         {
@@ -30,7 +30,7 @@ function packet_inbound(id, message) {
             data.id = id;
             data.username = rtc.usernames[id]; /* username lookup */
 
-            //console.log(data);
+
 
             /* pass data along */
             if (data.messages) {
@@ -43,13 +43,10 @@ function packet_inbound(id, message) {
         }
         if(event == "shoot")
         {
-            console.log("SHOOT EVENTS RECEIVE") ;
+
             var data  = JSON.parse(message).data.messages ;
 
-            console.log("send your shoot =>" + JSON.stringify(data)  ) ;
-            console.log("send your shoot NAME =>" +  data.username  ) ;
             party.addShoot(data.x , data.y , data.vitesseX , data.vitesseY , data.username , data.timeShoot) ;
-            console.log("JE TIRE") ;
 
         }
 
@@ -57,17 +54,12 @@ function packet_inbound(id, message) {
         {
             var data  = JSON.parse(message).data.messages ;
 
-            console.log( data ) ;
 
             party.updatePlayers( data.namePlayer , data.x , data.y , data.team);
         }
         if(event == "validatename")
         {
             var data  = JSON.parse(message).data.messages ;
-            console.log("reception Message") ;
-
-
-
         }
         if(event == "askplayersposition")
         {
@@ -75,13 +67,34 @@ function packet_inbound(id, message) {
             var mySituation = {namePlayer: party.p.name,   x: party.p.mapX , y: party.p.mapY , team: party.p.team} ;
 
             envoyerPositionToSomeOne( mySituation , data.name) ;
-
-
-        }
+         }
         if(event == "readytostart")
         {
             var data  = JSON.parse(message).data.message ;
+            party.joueurs = new Array() ;
+            for(var i = 0 ; i< data.length ; i++)
+            {
+                var p
+                if(data[i].team == "blue")
+                {
+                    p = new personnage(100, 100 , party.c) ;
+
+                }else if(data[i].team == "yellow")
+                {
+                    p = new personnage(2700, 300 , party.c) ;
+
+                }
+                p.name = data[i].name ;
+                party.joueurs.push(p) ;
+                if(p.name == party.p.name)
+                {
+                    party.p = p ;
+
+                }
+            }
+
             party.start() ;
+            party.restart() ;
         }
 
 

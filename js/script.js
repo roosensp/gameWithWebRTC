@@ -17,14 +17,14 @@ initRTCCopy();
 
 /* Chrome 31 does not work right now :( */
 function display_31_error() {
-    console.log("METHODE 1") ;
+
 	if ($.browser.name == "chrome" && ($.browser.versionNumber < 32) ) {
 		boot_alert('Due to a bug in your browser, this website will not work, sorry. Please try Firefox 24+ or Chrome Canary 32+.');
 	}
 }
 
 function display_error() {
-    console.log("METHODE 2") ;
+
 	/* REQUIRED SCTP data channels behind flag in 29 & 30 */
 	if ($.browser.name == "chrome" && ($.browser.versionNumber == 29 || $.browser.versionNumber == 30)) {
 		boot_alert('You are using Chrome version ' + $.browser.versionNumber + ', please turn the "Enable SCTP Data Channels" flag in: chrome://flags/#enable-sctp-data-channels');
@@ -165,7 +165,7 @@ function transition_from_username_to_main() {
 
 /* adds to your chat */
 function addToChat(msg, color) {
-    console.log("METHODE 6") ;
+
   var messages = document.getElementById('messages');
   msg = sanitize(msg);
   if(color) {
@@ -228,7 +228,7 @@ var dataChannelChat = {
 		}
 	},
 	recv: function(channel, message) {
-        console.log("METHODE 9.3") ;
+
 		return message; /* need to do post processing later */
 	},
 	event: 'data stream data'
@@ -239,10 +239,10 @@ var dataChannelChat = {
 /* init - starts WebRTC connection, called after username is entered */
 function init() {
 
-   console.log("USER NAME" + username) ;
+
    party.p.name = username ;
    party.listJoueurServer.push(username) ;
-   party.start() ;
+   //party.start() ;
 
    if(!PeerConnection) {
 	display_error();
@@ -330,7 +330,7 @@ function init() {
 
 /* start the chat box */
 function initChat() {
-    console.log(" INIT THE CHAT ") ;
+
    var chat;
   chat = dataChannelChat;
   
@@ -363,7 +363,7 @@ function initChat() {
     /* decode and append to data */
     data = chat.recv.apply(this, arguments);
 
-	    console.log("EVENT CHAT => " +data) ;
+
 
 
 	if (encryption_type != "NONE") {

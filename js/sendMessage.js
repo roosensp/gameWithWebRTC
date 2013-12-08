@@ -12,13 +12,29 @@ function readyToStart()
     var chat = dataChannelChat;
     var room = window.location.hash.slice(1);
 
+    var messageToSend = "" ;
+    var arrayToSend = [] ;
+    if(party.joueurs != null)
+    {
+        var obj ;
+        for(var i = 0 ; i<party.joueurs.length ; i++)
+        {
+            obj = { name: party.joueurs[i].name , team: party.joueurs[i].team}
+            arrayToSend.push(obj) ;
+        }
+
+
+
+    }
+
     chat.broadcast(JSON.stringify({
         "eventName": "readytostart",
         "data": {
-            "message": "",
+            "message": arrayToSend,
             "room": room
         }
     }));
+    console.log("MESSAGE ENVOYER readytostart => " + JSON.stringify(arrayToSend) )  ;
 }
 
 function askPlayersPosition()
@@ -34,6 +50,7 @@ function askPlayersPosition()
             "room": room
         }
     }));
+    console.log("MESSAGE ENVOYER  askplayersposition => " + JSON.stringify({name : party.p.name}) )  ;
 }
 
 function envoyerPositionToSomeOne( data , who)
@@ -49,7 +66,7 @@ function envoyerPositionToSomeOne( data , who)
 
             if (rtc.connection_ok_to_send[connection]) {
 
-                console.log("HELLO ") ;
+
                 chat.send(connection
                     , JSON.stringify({
                         "eventName": "position",
@@ -60,7 +77,7 @@ function envoyerPositionToSomeOne( data , who)
                     })
 
                 )
-
+                console.log("MESSAGE ENVOYER  position to someone=> " + data)  ;
 
             } else {
                 console.log("unable to send message to " + connection);
@@ -85,6 +102,7 @@ function envoyerPosition(data)
             "room": room
         }
     }));
+    console.log("MESSAGE ENVOYER position=> " + data)  ;
 
 }
 
@@ -103,6 +121,7 @@ function envoyerShoot( data )
             "room": room
         }
     }));
+    console.log("MESSAGE ENVOYER shoot => " + data)  ;
 
 
 

@@ -43,7 +43,7 @@ function personnage(positionX , positionY , c)
      }
      function shoot(mouseX , mouseY , timeShoot )
      {
-         console.log("PERSONNE => SHOOT ") ;
+
          var puissance = 15 ;
          var angle = Math.atan2(this.x-mouseX, this.y-mouseY)   ;
          var dx    = puissance*Math.sin(angle);
